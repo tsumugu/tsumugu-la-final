@@ -3,6 +3,7 @@ package xyz.tsumugu2626.app.la23.final2
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import xyz.tsumugu2626.app.la23.final2.databinding.ActivityMainBinding
 import java.text.DateFormat
@@ -16,11 +17,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager2: ViewPager2
     private lateinit var viewPagerAdapter: ViewPagerAdapter
-    private var date: Date = Date(System.currentTimeMillis())
 
-    private fun dispDateToLabel() {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
-        binding.pageNumberText.setText(df.format(date))
+    private val timelineModel: TimelineModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(TimelineModel::class.java)
     }
 
     private val callBack = object : ViewPager2.OnPageChangeCallback() {
@@ -37,16 +36,8 @@ class MainActivity : AppCompatActivity() {
             super.onPageSelected(position)
 
             when (position - prevPosition) {
-                -1, 3 -> {
-                    // Log.d("move", "back")
-                    date.date -= 1
-                    dispDateToLabel()
-                }
-                1, -3 -> {
-                    // Log.d("move", "go")
-                    date.date += 1
-                    dispDateToLabel()
-                }
+                -1 -> timelineModel.prev()
+                1 -> timelineModel.next()
             }
             prevPosition = position
 
@@ -72,7 +63,18 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(callBack)
         }
 
-        dispDateToLabel()
+        timelineModel.date.observe(this, { date ->
+            Log.d("observeDate", date)
+            binding.pageNumberText.setText(date)
+        })
+
+        binding.nextButton.setOnClickListener {
+            viewPager2.setCurrentItem(viewPager2.currentItem + 1)
+        }
+
+        binding.prevButton.setOnClickListener {
+            viewPager2.setCurrentItem(viewPager2.currentItem - 1)
+        }
 
     }
 }
