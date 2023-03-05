@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
             super.onPageSelected(position)
 
             when (position - prevPosition) {
-                -1 -> mainActivityViewModel.prev()
-                1 -> mainActivityViewModel.next()
+                -1 -> mainActivityViewModel.onPrevButtonClicked()
+                1 -> mainActivityViewModel.onNextButtonClicked()
             }
             prevPosition = position
 

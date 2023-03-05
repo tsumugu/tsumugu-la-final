@@ -18,11 +18,11 @@ class MainActivityViewModel : ViewModel() {
         return 24 * 60 * 60 * 1000
     }
 
-    fun next() {
+    fun onNextButtonClicked() {
         _currentTimeMillis.value = _currentTimeMillis.value?.plus(oneDayMillis())
     }
 
-    fun prev() {
+    fun onPrevButtonClicked() {
         _currentTimeMillis.value = _currentTimeMillis.value?.minus(oneDayMillis())
     }
 
