@@ -1,17 +1,13 @@
 package xyz.tsumugu2626.app.la23.final2
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.time.Duration.Companion.milliseconds
 
 
-class TimelineModel : ViewModel() {
+class MainActivityViewModel : ViewModel() {
 
     private var millis = System.currentTimeMillis()
     val date: MutableLiveData<String>

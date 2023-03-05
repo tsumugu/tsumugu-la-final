@@ -2,6 +2,7 @@ package xyz.tsumugu2626.app.la23.final2
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -18,9 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager2: ViewPager2
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
-    private val timelineModel: TimelineModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(TimelineModel::class.java)
-    }
+    private val mainActivityViewModel: MainActivityViewModel by viewModels<MainActivityViewModel>()
 
     private val callBack = object : ViewPager2.OnPageChangeCallback() {
         private var realPosition = -1
@@ -36,8 +35,8 @@ class MainActivity : AppCompatActivity() {
             super.onPageSelected(position)
 
             when (position - prevPosition) {
-                -1 -> timelineModel.prev()
-                1 -> timelineModel.next()
+                -1 -> mainActivityViewModel.prev()
+                1 -> mainActivityViewModel.next()
             }
             prevPosition = position
 
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(callBack)
         }
 
-        timelineModel.date.observe(this, { date ->
+        mainActivityViewModel.date.observe(this, { date ->
             Log.d("observeDate", date)
             binding.pageNumberText.setText(date)
         })
