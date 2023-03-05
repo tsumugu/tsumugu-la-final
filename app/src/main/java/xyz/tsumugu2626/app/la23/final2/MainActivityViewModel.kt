@@ -14,7 +14,7 @@ class MainActivityViewModel : ViewModel() {
         MutableLiveData<Long>(System.currentTimeMillis())
     val currentTimeMillis: LiveData<Long> get() = _currentTimeMillis
 
-    fun oneDayMillis(): Int {
+    private fun oneDayMillis(): Int {
         return 24 * 60 * 60 * 1000
     }
 
