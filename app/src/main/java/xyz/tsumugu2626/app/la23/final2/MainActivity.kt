@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     // 無限スクロール参考 : https://qiita.com/leb397/items/b78b8f526e86d7699dea
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewPager2: ViewPager2
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     private val mainActivityViewModel: MainActivityViewModel by viewModels<MainActivityViewModel>()
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         override fun onPageScrollStateChanged(state: Int) {
             super.onPageScrollStateChanged(state)
             if (state == ViewPager2.SCROLL_STATE_IDLE && realPosition >= 0) {
-                viewPager2.setCurrentItem(realPosition, false)
+                binding.pager.setCurrentItem(realPosition, false)
                 realPosition = -1
             }
         }
@@ -52,10 +51,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
-        //ViewPager2の設定
-        viewPager2 = binding.pager
         viewPagerAdapter = ViewPagerAdapter(this)
-        viewPager2.apply {
+        binding.pager.apply {
             adapter = viewPagerAdapter
             setCurrentItem(1,false)
             offscreenPageLimit = 1
@@ -67,11 +64,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.nextButton.setOnClickListener {
-            viewPager2.setCurrentItem(viewPager2.currentItem + 1)
+            binding.pager.setCurrentItem(binding.pager.currentItem + 1)
         }
 
         binding.prevButton.setOnClickListener {
-            viewPager2.setCurrentItem(viewPager2.currentItem - 1)
+            binding.pager.setCurrentItem(binding.pager.currentItem - 1)
         }
 
     }
