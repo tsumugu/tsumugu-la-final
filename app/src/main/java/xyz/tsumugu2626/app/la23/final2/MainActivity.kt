@@ -62,9 +62,8 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(callBack)
         }
 
-        mainActivityViewModel.date.observe(this, { date ->
-            Log.d("observeDate", date)
-            binding.pageNumberText.setText(date)
+        mainActivityViewModel.currentTimeMillis.observe(this, { currentTimeMillis ->
+            binding.pageNumberText.setText(currentTimeMillis.toDateStr())
         })
 
         binding.nextButton.setOnClickListener {
