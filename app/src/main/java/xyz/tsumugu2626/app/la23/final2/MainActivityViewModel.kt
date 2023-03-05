@@ -27,5 +27,3 @@ class MainActivityViewModel : ViewModel() {
     }
 
 }
-
-fun Long.toDateStr(): String = SimpleDateFormat("yyyy/MM/dd").format(Date(this))
