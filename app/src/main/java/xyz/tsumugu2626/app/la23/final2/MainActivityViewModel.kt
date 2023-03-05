@@ -10,16 +10,20 @@ import java.util.Date
 
 class MainActivityViewModel : ViewModel() {
 
-    private var _currentTimeMillis: MutableLiveData<Long>
-            = MutableLiveData<Long>(System.currentTimeMillis())
+    private val _currentTimeMillis: MutableLiveData<Long> =
+        MutableLiveData<Long>(System.currentTimeMillis())
     val currentTimeMillis: LiveData<Long> get() = _currentTimeMillis
 
+    fun oneDayMillis(): Int {
+        return 24 * 60 * 60 * 1000
+    }
+
     fun next() {
-        _currentTimeMillis += 24*60*60*1000
+        _currentTimeMillis.value = _currentTimeMillis.value?.plus(oneDayMillis())
     }
 
     fun prev() {
-        _currentTimeMillis -= 24*60*60*1000
+        _currentTimeMillis.value = _currentTimeMillis.value?.minus(oneDayMillis())
     }
 
 }
