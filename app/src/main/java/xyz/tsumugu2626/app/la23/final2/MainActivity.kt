@@ -53,16 +53,17 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(viewPagerOnPageChangeCallBack)
         }
 
-        mainActivityViewModel.currentTimeMillis.observe(this, { currentTimeMillis ->
-            binding.pageNumberText.setText(currentTimeMillis.toDateStr())
-        })
+        mainActivityViewModel.currentTimeMillis.observe(this) { currentTimeMillis ->
+            binding.pageNumberText.text = currentTimeMillis.toDateStr()
+            viewPagerAdapter.setCurrentPageMillis(currentTimeMillis)
+        }
 
         binding.nextButton.setOnClickListener {
-            binding.pager.setCurrentItem(binding.pager.currentItem + 1)
+            binding.pager.currentItem = binding.pager.currentItem + 1
         }
 
         binding.prevButton.setOnClickListener {
-            binding.pager.setCurrentItem(binding.pager.currentItem - 1)
+            binding.pager.currentItem = binding.pager.currentItem - 1
         }
 
     }

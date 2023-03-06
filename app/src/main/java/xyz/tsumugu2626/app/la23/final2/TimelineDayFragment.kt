@@ -4,24 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineDayFragmentBinding
 
 class TimelineDayFragment : Fragment() {
 
     companion object {
-        private const val BUNDLE_POSITION_KEY = "POSITION"
-        fun instantiate(pos: Int) = TimelineDayFragment().apply {
-            arguments = Bundle().apply { putInt(BUNDLE_POSITION_KEY, pos) }
+        private const val BUNDLE_KEY = "CURRENT_PAGE_MILLIS"
+        fun instantiate(dateLong: Long) = TimelineDayFragment().apply {
+            arguments = Bundle().apply { putLong(BUNDLE_KEY, dateLong) }
         }
     }
 
     private lateinit var binding: TimelineDayFragmentBinding
-    private var position = 0
+    private val timelineDayViewModel: TimelineDayViewModel by viewModels<TimelineDayViewModel>()
+    private var dateMillis: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        position = arguments?.getInt(BUNDLE_POSITION_KEY) ?: 0
+        dateMillis = arguments?.getLong(BUNDLE_KEY) ?: 0
     }
 
     override fun onCreateView(
@@ -35,10 +38,11 @@ class TimelineDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timelineView.timelineEvents = ArrayList<com.akribase.timelineview.Event>().apply {
-            add(com.akribase.timelineview.Event("Orgy", 1636949888, 1636959000))
-            add(com.akribase.timelineview.Event("Party", 1636960100, 1636966000))
-            add(com.akribase.timelineview.Event("Free Schwag", 1636967000, 1636987000))
+        timelineDayViewModel.load(dateMillis)
+        timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) { timelineEvent ->
+            if (timelineEvent != null) {
+                binding.timelineView.timelineEvents = timelineEvent
+            }
         }
 
     }
