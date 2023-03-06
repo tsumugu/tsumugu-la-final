@@ -8,22 +8,20 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
+private const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000
+
 class MainActivityViewModel : ViewModel() {
 
     private val _currentTimeMillis: MutableLiveData<Long> =
         MutableLiveData<Long>(System.currentTimeMillis())
     val currentTimeMillis: LiveData<Long> get() = _currentTimeMillis
 
-    private fun oneDayMillis(): Int {
-        return 24 * 60 * 60 * 1000
-    }
-
     fun onNextButtonClicked() {
-        _currentTimeMillis.value = _currentTimeMillis.value?.plus(oneDayMillis())
+        _currentTimeMillis.value = _currentTimeMillis.value?.plus(ONE_DAY_MILLIS)
     }
 
     fun onPrevButtonClicked() {
-        _currentTimeMillis.value = _currentTimeMillis.value?.minus(oneDayMillis())
+        _currentTimeMillis.value = _currentTimeMillis.value?.minus(ONE_DAY_MILLIS)
     }
 
 }

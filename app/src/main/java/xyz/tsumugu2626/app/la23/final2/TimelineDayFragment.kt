@@ -23,7 +23,6 @@ class TimelineDayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         position = arguments?.getInt(BUNDLE_POSITION_KEY) ?: 0
-//        Log.d("position", position.toString());
     }
 
     override fun onCreateView(
