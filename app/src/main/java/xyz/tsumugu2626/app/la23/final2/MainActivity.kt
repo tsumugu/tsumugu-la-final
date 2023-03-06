@@ -1,15 +1,10 @@
 package xyz.tsumugu2626.app.la23.final2
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import xyz.tsumugu2626.app.la23.final2.databinding.ActivityMainBinding
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,7 +1,6 @@
 package xyz.tsumugu2626.app.la23.final2
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

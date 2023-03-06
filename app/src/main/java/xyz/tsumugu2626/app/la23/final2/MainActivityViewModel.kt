@@ -2,10 +2,7 @@ package xyz.tsumugu2626.app.la23.final2
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-
 import androidx.lifecycle.ViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
 
 
 private const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000

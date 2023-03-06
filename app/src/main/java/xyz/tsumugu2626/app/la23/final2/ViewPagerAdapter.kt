@@ -1,6 +1,5 @@
 package xyz.tsumugu2626.app.la23.final2
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
