@@ -8,8 +8,6 @@ import xyz.tsumugu2626.app.la23.final2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    // 無限スクロール参考 : https://qiita.com/leb397/items/b78b8f526e86d7699dea
-
     private lateinit var binding: ActivityMainBinding
     private val mainActivityViewModel: MainActivityViewModel by viewModels<MainActivityViewModel>()
 

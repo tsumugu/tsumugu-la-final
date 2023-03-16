@@ -1,6 +1,7 @@
 package xyz.tsumugu2626.app.la23.final2
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

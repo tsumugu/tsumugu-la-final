@@ -24,9 +24,8 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
     @RequiresApi(Build.VERSION_CODES.O)
     fun load(dateMillis: Long) {
 
-        Log.d("tlvm-dateMillis", dateMillis.toString())
-
         val db = Firebase.firestore
+        val currentDateStr = dateMillis.toDateStr()
 
         db.collection("events").addSnapshotListener { events, e ->
             if (e != null) {
@@ -38,9 +37,13 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
                 val tmpTimelineEvent =  ArrayList<TimelineEvent>()
                 events.forEach {
                     val event = it.toObject(TimelineEvent::class.java)
-                    tmpTimelineEvent.add(event)
+                    event.startHm = (event.startedAt.toLocaleEpochSeconds() * 1000).toHmStr()
+                    event.endHm = (event.endedAt.toLocaleEpochSeconds() * 1000).toHmStr()
+                    event.dayHm = (event.startedAt.toLocaleEpochSeconds() * 1000).toDateStr()
+                    if (event.dayHm == currentDateStr) {
+                        tmpTimelineEvent.add(event)
+                    }
                 }
-                Log.d("tmpTimelineEvent", tmpTimelineEvent.size.toString())
                 _timelineEvent.value = tmpTimelineEvent
                 savedStateHandle.set(SAVED_STATE_HANDLE_KEY, _timelineEvent.value)
             } else {

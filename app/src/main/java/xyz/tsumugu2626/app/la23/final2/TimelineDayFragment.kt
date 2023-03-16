@@ -33,19 +33,38 @@ class TimelineDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val timelineEventAdapter = TimelineEventAdapter()
-        binding.recyclerView.adapter = timelineEventAdapter
         binding.recyclerView.layoutManager = TimelineEventLayoutManager(view.context)
+        val dividerItemDecoration = DividerItemDecoration(view.context, LinearLayoutManager(view.context).orientation)
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        var localCurrentTimeMillis: Long = 0
 
         timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) { timelineEvent ->
             if (timelineEvent != null) {
-                timelineEventAdapter.submitList(timelineEvent)
+                drawTimeLine(timelineEvent, localCurrentTimeMillis)
             }
         }
 
         mainActivityViewModel.currentTimeMillis.observe(viewLifecycleOwner) { currentTimeMillis ->
             timelineDayViewModel.load(currentTimeMillis)
+            localCurrentTimeMillis = currentTimeMillis
         }
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun drawTimeLine(timelineEvent: ArrayList<TimelineEvent>, currentTimeMillis: Long) {
+        // 時間順で降順
+//        timelineEvent.sortedWith(compareBy {
+//            it.startedAt.toLocaleEpochSeconds()
+//        })
+
+        var tmpTimelineEventList = timelineEvent
+        for (i in 0..23) {
+            val event = TimelineEvent()
+            event.type = "space"
+            event.startHm = i.toString()
+            event.dayHm = currentTimeMillis.toDateStr()
+            tmpTimelineEventList.add(event)
+        }
     }
 }
