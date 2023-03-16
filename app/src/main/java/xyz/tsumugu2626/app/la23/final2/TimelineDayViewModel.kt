@@ -1,11 +1,16 @@
 package xyz.tsumugu2626.app.la23.final2
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.akribase.timelineview.Event
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlin.collections.ArrayList
 
 class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
@@ -16,16 +21,30 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
         = savedStateHandle.getLiveData(SAVED_STATE_HANDLE_KEY, ArrayList<Event>())
     val timelineEvent: LiveData<ArrayList<Event>> get() = _timelineEvent
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun load(dateMillis: Long) {
-        Log.d("dateMillisFromArg", dateMillis.toDateStr());
-        // TODO: firebaseからの取得処理
-        val tmpTimelineEvent = _timelineEvent
-        tmpTimelineEvent.value?.apply {
-            add(Event("vmから1", 1636949888, 1636959000))
-            add(Event("vmから2", 1636960100, 1636966000))
-            add(Event("vmから3", 1636967000, 1636987000))
+
+        Log.d("tlvm-dateMillis", dateMillis.plus(0).toString())
+
+        val db = Firebase.firestore
+
+        db.collection("events").addSnapshotListener { events, e ->
+            if (e != null) {
+                Log.e("error", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (events != null) {
+                val tmpTimelineEvent =  ArrayList<Event>()
+                events.forEach {
+                    val event = it.toObject(TimelineEvent::class.java)
+                    tmpTimelineEvent.add(Event(event.id, event.startedAt.toLocaleEpochSeconds(), event.endedAt.toLocaleEpochSeconds()))
+                }
+                _timelineEvent.value = tmpTimelineEvent
+                savedStateHandle.set(SAVED_STATE_HANDLE_KEY, _timelineEvent.value)
+            } else {
+                Log.d("error", "Current data: null")
+            }
         }
-        _timelineEvent.value = tmpTimelineEvent.value
-        savedStateHandle.set(SAVED_STATE_HANDLE_KEY, _timelineEvent.value)
     }
 }
