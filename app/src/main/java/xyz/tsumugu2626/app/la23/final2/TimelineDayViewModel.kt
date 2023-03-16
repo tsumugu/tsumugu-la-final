@@ -24,7 +24,7 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
     @RequiresApi(Build.VERSION_CODES.O)
     fun load(dateMillis: Long) {
 
-        Log.d("tlvm-dateMillis", dateMillis.plus(0).toString())
+        Log.d("tlvm-dateMillis", dateMillis.toString())
 
         val db = Firebase.firestore
 

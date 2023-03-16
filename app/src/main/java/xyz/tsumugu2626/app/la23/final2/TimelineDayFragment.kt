@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineDayFragmentBinding
 
 class TimelineDayFragment : Fragment() {
@@ -31,9 +33,14 @@ class TimelineDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val taskAdapter = TimelineEventAdapter()
+        binding.recyclerView.adapter = taskAdapter
+        binding.recyclerView.layoutManager =
+            LinearLayoutManager(viewLifecycleOwner, LinearLayoutManager.VERTICAL, false)
+
         timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) { timelineEvent ->
             if (timelineEvent != null) {
-                binding.timelineView.timelineEvents = timelineEvent
+
             }
         }
 

@@ -11,11 +11,16 @@
         android:overScrollMode="never"
         tools:context=".TimelineFragment">
 
-        <com.akribase.timelineview.TimelineView
+        <!--<com.akribase.timelineview.TimelineView
             android:id="@+id/timeline_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startLabel="0" />
+            app:startLabel="0" />-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
     </ScrollView>
 </layout>
