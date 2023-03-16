@@ -11,6 +11,12 @@ class ViewPagerAdapter(mainActivity: MainActivity): FragmentStateAdapter(mainAct
     fun getRealCount() = realNumPage
 
     override fun createFragment(position: Int): Fragment {
+//        val fragment = TimelineDayFragment()
+//        val args = Bundle()
+//        args.putInt("POSITION", )
+//        fragment.setArguments(args)
+//
+//        return fragment
         return when(position) {
             0,3 -> TimelineDayFragment() // ThirdFragment()
             1,4 -> TimelineDayFragment() // FirstFragment()

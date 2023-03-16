@@ -1,7 +1,6 @@
 package xyz.tsumugu2626.app.la23.final2
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ class TimelineDayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         position = arguments?.getInt(BUNDLE_POSITION_KEY) ?: 0
-//        Log.d("position", position.toString());
     }
 
     override fun onCreateView(
