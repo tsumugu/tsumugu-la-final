@@ -17,9 +17,9 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
     companion object {
         private const val SAVED_STATE_HANDLE_KEY = "TIMELINE_EVENT_DATA"
     }
-    private val _timelineEvent: MutableLiveData<ArrayList<Event>>
-        = savedStateHandle.getLiveData(SAVED_STATE_HANDLE_KEY, ArrayList<Event>())
-    val timelineEvent: LiveData<ArrayList<Event>> get() = _timelineEvent
+    private val _timelineEvent: MutableLiveData<ArrayList<TimelineEvent>>
+        = savedStateHandle.getLiveData(SAVED_STATE_HANDLE_KEY, ArrayList<TimelineEvent>())
+    val timelineEvent: LiveData<ArrayList<TimelineEvent>> get() = _timelineEvent
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun load(dateMillis: Long) {
@@ -35,11 +35,12 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
             }
 
             if (events != null) {
-                val tmpTimelineEvent =  ArrayList<Event>()
+                val tmpTimelineEvent =  ArrayList<TimelineEvent>()
                 events.forEach {
                     val event = it.toObject(TimelineEvent::class.java)
-                    tmpTimelineEvent.add(Event(event.id, event.startedAt.toLocaleEpochSeconds(), event.endedAt.toLocaleEpochSeconds()))
+                    tmpTimelineEvent.add(event)
                 }
+                Log.d("tmpTimelineEvent", tmpTimelineEvent.size.toString())
                 _timelineEvent.value = tmpTimelineEvent
                 savedStateHandle.set(SAVED_STATE_HANDLE_KEY, _timelineEvent.value)
             } else {

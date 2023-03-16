@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineItemBinding
 
-class TimelineEventAdapter  : ListAdapter<TimelineEvent, TimelineEventViewHolder>(diffUtilItemCallback) {
+class TimelineEventAdapter : ListAdapter<TimelineEvent, TimelineEventViewHolder>(diffUtilItemCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineEventViewHolder {
         val view = TimelineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TimelineEventViewHolder(view)
@@ -27,6 +27,7 @@ class TimelineEventViewHolder(
 //        binding.dateTextView.text =
 //            SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(task.createdAt)
     }
+
 }
 
 private val diffUtilItemCallback = object : DiffUtil.ItemCallback<TimelineEvent>() {

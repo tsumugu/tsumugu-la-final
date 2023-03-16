@@ -6,14 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineDayFragmentBinding
+
 
 class TimelineDayFragment : Fragment() {
 
@@ -33,14 +33,13 @@ class TimelineDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val taskAdapter = TimelineEventAdapter()
-        binding.recyclerView.adapter = taskAdapter
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(viewLifecycleOwner, LinearLayoutManager.VERTICAL, false)
+        val timelineEventAdapter = TimelineEventAdapter()
+        binding.recyclerView.adapter = timelineEventAdapter
+        binding.recyclerView.layoutManager = TimelineEventLayoutManager(view.context)
 
         timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) { timelineEvent ->
             if (timelineEvent != null) {
-
+                timelineEventAdapter.submitList(timelineEvent)
             }
         }
 
