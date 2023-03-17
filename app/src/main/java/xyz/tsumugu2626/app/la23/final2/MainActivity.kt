@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainActivityViewModel.currentTimeMillis.observe(this) { currentTimeMillis ->
-            binding.pageNumberText.text = currentTimeMillis.toDateStr()
+            binding.pageNumberText.text = currentTimeMillis.millisToYmdStr()
         }
 
         binding.nextButton.setOnClickListener {

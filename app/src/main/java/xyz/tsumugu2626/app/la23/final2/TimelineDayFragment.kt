@@ -13,6 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineDayFragmentBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TimelineDayFragment : Fragment() {
@@ -36,35 +39,25 @@ class TimelineDayFragment : Fragment() {
         binding.recyclerView.layoutManager = TimelineEventLayoutManager(view.context)
         val dividerItemDecoration = DividerItemDecoration(view.context, LinearLayoutManager(view.context).orientation)
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
-        var localCurrentTimeMillis: Long = 0
-
-        timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) { timelineEvent ->
-            if (timelineEvent != null) {
-                drawTimeLine(timelineEvent, localCurrentTimeMillis)
-            }
-        }
 
         mainActivityViewModel.currentTimeMillis.observe(viewLifecycleOwner) { currentTimeMillis ->
-            timelineDayViewModel.load(currentTimeMillis)
-            localCurrentTimeMillis = currentTimeMillis
+            drawTimeline(currentTimeMillis)
+        }
+
+        timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) {
+            mainActivityViewModel.currentTimeMillis.value?.let {
+                    drawTimeline(it)
+            }
         }
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun drawTimeLine(timelineEvent: ArrayList<TimelineEvent>, currentTimeMillis: Long) {
-        // 時間順で降順
-//        timelineEvent.sortedWith(compareBy {
-//            it.startedAt.toLocaleEpochSeconds()
-//        })
-
-        var tmpTimelineEventList = timelineEvent
-        for (i in 0..23) {
-            val event = TimelineEvent()
-            event.type = "space"
-            event.startHm = i.toString()
-            event.dayHm = currentTimeMillis.toDateStr()
-            tmpTimelineEventList.add(event)
+    private fun drawTimeline(currentTimeMillis: Long) {
+        timelineDayViewModel.timelineEvent.value?.let {
+            binding.recyclerView.adapter = TimelineEventAdapter(
+                timelineDayViewModel.genTimeLineEvents(it, currentTimeMillis)
+            )
         }
     }
 }
