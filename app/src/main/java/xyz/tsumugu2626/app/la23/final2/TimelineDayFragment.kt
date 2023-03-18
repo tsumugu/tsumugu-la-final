@@ -36,28 +36,29 @@ class TimelineDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.layoutManager = TimelineEventLayoutManager(view.context)
+        binding.recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         val dividerItemDecoration = DividerItemDecoration(view.context, LinearLayoutManager(view.context).orientation)
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
 
-        mainActivityViewModel.currentTimeMillis.observe(viewLifecycleOwner) { currentTimeMillis ->
-            drawTimeline(currentTimeMillis)
+        mainActivityViewModel.currentTimeMillis.observe(viewLifecycleOwner) {
+            drawTimeline(view)
         }
 
         timelineDayViewModel.timelineEvent.observe(viewLifecycleOwner) {
-            mainActivityViewModel.currentTimeMillis.value?.let {
-                    drawTimeline(it)
-            }
+            drawTimeline(view)
         }
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun drawTimeline(currentTimeMillis: Long) {
-        timelineDayViewModel.timelineEvent.value?.let {
-            binding.recyclerView.adapter = TimelineEventAdapter(
-                timelineDayViewModel.genTimeLineEvents(it, currentTimeMillis)
-            )
-        }
+    private fun drawTimeline(view: View) {
+        val timelineEvent = timelineDayViewModel.timelineEvent.value
+        val currentTimeMillis = mainActivityViewModel.currentTimeMillis.value
+        if (timelineEvent == null) return
+        if (currentTimeMillis == null) return
+
+        binding.recyclerView.adapter = TimelineEventAdapter(
+            timelineDayViewModel.genTimeLineEvents(timelineEvent, currentTimeMillis, view.context)
+        )
     }
 }

@@ -1,5 +1,6 @@
 package xyz.tsumugu2626.app.la23.final2
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.akribase.timelineview.Event
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 import kotlin.collections.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -55,7 +57,7 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun genTimeLineEvents(timelineEvent: ArrayList<TimelineEvent>, currentTimeMillis: Long): List<TimelineEvent> {
+    fun genTimeLineEvents(timelineEvent: ArrayList<TimelineEvent>, currentTimeMillis: Long, context: Context): List<TimelineEvent> {
 
         val currentDateStr = currentTimeMillis.millisToYmdStr()
 
@@ -66,7 +68,7 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
         //0時0分から23時59分までの時間帯において、既に存在しているイベントを考慮しながら、1時間ごとにTimelineEventを生成し、tmpTimelineEventListに追加する
         val startOfDate = currentTimeMillis.millisToStartOfDate()
         val startTime = startOfDate.offsetDate(0, -1)
-        val endTime = startOfDate.offsetDate(23, 59)
+        val endTime = startOfDate.offsetDate(24, 0)
         var prevEndTime = startTime
         for (i in 0..100) { // ループさせたいが無限ループは怖いので適当に
             var startedAt = prevEndTime.offsetDate(0, 1)
@@ -78,83 +80,52 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
             var overlappedEvent: TimelineEvent? = null
             for (event in filteredTimelineEvent) {
                 if (startedAt.before(event.endedAt) && endedAt.after(event.startedAt)) {
+                    if (startedAt <= event.startedAt && endedAt <= event.endedAt) {
+                        endedAt = event.startedAt
+                    } else if (startedAt  <= event.startedAt && !(endedAt  <= event.endedAt)) {
+                        endedAt = event.startedAt
+                    } else if (!(startedAt <= event.startedAt) && endedAt <= event.endedAt) {
+                        endedAt = event.endedAt
+                    } else if (!(startedAt <= event.startedAt) && !(endedAt <= event.endedAt)) {
+                        endedAt = event.endedAt
+                    }
                     overlappedEvent = event
-                    endedAt = event.endedAt // 重なっていたらendedAtをそのイベントのendedAtにする
                     break
                 }
             }
-//            if (overlappedEvent == null) {
-//                endedAt = endedAt.setMinute(59); // 重なっていなかったらendedAtはHH:59にする
-//            }
-            Log.d("timebox", startedAt.toString()+" - "+endedAt.toString())
-            // アイテムの追加
             if (overlappedEvent == null) {
-                val newEvent = TimelineEvent(
-                    type = "space",
-                    startHm = (startedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-                    endHm = (endedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-                    dayHm = (startOfDate.toLocaleEpochSeconds()*1000).millisToHmStr(),
-                    startedAt = startedAt,
-                    endedAt = endedAt
-                )
-                tmpTimelineEventList.add(newEvent)
-            } else {
-                Log.d("overlappedEvent", overlappedEvent.startedAt.toString()+" / "+overlappedEvent.endedAt.toString())
-                tmpTimelineEventList.add(overlappedEvent)
+                endedAt = endedAt.setMinute(59)
             }
-            //
+            // アイテムの追加
+            val newEvent = TimelineEvent(
+                type = "space",
+                dayHm = (startOfDate.toLocaleEpochSeconds()*1000).millisToHmStr(),
+                startHm = (startedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
+                //endHm = (endedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
+                startedAt = startedAt,
+                endedAt = endedAt,
+                heightPx = DP.dpToPx(DP.calcDpFromTimestamp(startedAt, endedAt), context)
+            )
+            if (overlappedEvent != null && startedAt.after(overlappedEvent.startedAt)) {
+                newEvent.type = "timeline_event"
+                newEvent.id = overlappedEvent.id
+                newEvent.createdAt = overlappedEvent.createdAt
+                newEvent.updatedAt = overlappedEvent.updatedAt
+                newEvent.url = overlappedEvent.url
+                newEvent.users = overlappedEvent.users
+                newEvent.endHm = (overlappedEvent.endedAt.toLocaleEpochSeconds()*1000).millisToHmStr()
+            }
+            tmpTimelineEventList.add(newEvent)
             prevEndTime = endedAt
         }
-//        val startOfDate = currentTimeMillis.millisToStartOfDate()
-//        val startTime = startOfDate.offsetDate(0, -1)
-//        val endTime = startOfDate.offsetDate(23, 59)
-//        var prevEndTime = startTime
-//        for (i in 0..23) {
-//            val startedAt = prevEndTime.offsetDate(0, 1)
-//            val endedAt = startedAt.offsetDate(0, 59)
-//            if (endedAt.after(endTime)) {
-//                break
-//            }
-//            val newEvent = TimelineEvent(
-//                            type = "space",
-//                            startHm = (startedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-//                            endHm = (endedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-//                            dayHm = (startOfDate.toLocaleEpochSeconds()*1000).millisToHmStr(),
-//                            startedAt = startedAt,
-//                            endedAt = endedAt
-//                        )
-//            var overlapedEvents = ArrayList<TimelineEvent>()
-//            for (event in tmpTimelineEventList) {
-//                if (newEvent.startedAt.before(event.endedAt) && newEvent.endedAt.after(event.startedAt)) {
-//                    overlapedEvents.add(event)
-//                    break
-//                }
-//            }
-//            if (overlapedEvents.size == 0) {
-//                tmpTimelineEventList.add(newEvent)
-//                prevEndTime = endedAt
-//            } else {
-//                Log.d("logddd", newEvent.startedAt.toString()+"-"+newEvent.endedAt.toString()+"  "+overlapedEvents.size.toString())
-////                val segment = (newEvent.startedAt.time - prevEndTime.time) / 1000
-////                Log.d("overlap", segment.toString())
-////                for (j in 0 until segment step 60) {
-////                    val subStartedAt = Calendar.getInstance().apply { time = prevEndTime }.apply { add(Calendar.MINUTE, j.toInt()) }.time
-////                    val subEndedAt = Calendar.getInstance().apply { time = subStartedAt }.apply { add(Calendar.MINUTE, 0) }.time
-////                    if (subEndedAt.after(newEvent.endedAt)) {
-////                        break
-////                    }
-////                    val subEvent = TimelineEvent(
-////                        type = "space",
-////                        startHm = (subStartedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-////                        endHm = (subEndedAt.toLocaleEpochSeconds()*1000).millisToHmStr(),
-////                        dayHm = (startOfDate.toLocaleEpochSeconds()*1000).millisToHmStr(),
-////                        startedAt = subStartedAt,
-////                        endedAt = subEndedAt
-////                    )
-////                    tmpTimelineEventList.add(subEvent)
-////                }
-//                prevEndTime = newEvent.endedAt
-//            }
-//        }
+
+        // 最後のひとつだけはendHmを追加
+        val lastOneIndex = tmpTimelineEventList.size - 1
+        val lastOneItem = tmpTimelineEventList.get(lastOneIndex)
+        lastOneItem.endHm = (lastOneItem.endedAt.toLocaleEpochSeconds()*1000).millisToHmStr()
+        tmpTimelineEventList.removeAt(lastOneIndex)
+        tmpTimelineEventList.add(lastOneItem)
+
+        return tmpTimelineEventList
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Space
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
@@ -42,10 +43,18 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
                 //holder.descriptionTextView.text = item.url
                 holder.descriptionTextView.text = item.startedAt.toString()
                 holder.timeboxTextView.text =  item.startHm + "-" + item.endHm
+
+                val params = holder.timeWithTextSpacer.layoutParams
+                params.height = item.heightPx
+                holder.timeWithTextSpacer.layoutParams = params
             }
             is TypeTwoViewHolder -> {
                 holder.timeStartTextView.text = item.startHm
                 holder.timeEndTextView.text = item.endHm
+
+                val params = holder.timeSpacer.layoutParams
+                params.height = item.heightPx
+                holder.timeSpacer.layoutParams = params
             }
         }
     }
@@ -69,11 +78,13 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
         val memberTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_member)
         val descriptionTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_description)
         val timeboxTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_time_box)
+        val timeWithTextSpacer: Space = itemView.findViewById(R.id.timeline_item_with_text_spacer)
     }
 
     inner class TypeTwoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val timeStartTextView: TextView = itemView.findViewById(R.id.timeline_item_text_start)
         val timeEndTextView: TextView = itemView.findViewById(R.id.timeline_item_text_end)
+        val timeSpacer: Space = itemView.findViewById(R.id.timeline_item_spacer)
     }
 }
 

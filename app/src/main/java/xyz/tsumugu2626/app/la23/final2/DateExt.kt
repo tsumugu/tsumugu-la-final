@@ -25,3 +25,9 @@ fun Date.setMinute(minute: Int): Date {
     calendar.set(Calendar.MINUTE, minute)
     return calendar.time
 }
+
+fun Date.getMinute(): Int {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+    return calendar.get(Calendar.MINUTE)
+}

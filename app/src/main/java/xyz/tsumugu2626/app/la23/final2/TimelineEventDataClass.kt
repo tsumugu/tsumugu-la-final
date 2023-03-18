@@ -5,7 +5,7 @@ import java.util.Date
 
 data class TimelineEvent (
     @DocumentId
-    val id: String = "",
+    var id: String = "",
     var type: String = "timeline_event",
     var createdAt: Date = Date(System.currentTimeMillis()),
     var updatedAt: Date = Date(System.currentTimeMillis()),
@@ -14,6 +14,7 @@ data class TimelineEvent (
     var startHm: String = "",
     var endHm: String = "",
     var dayHm: String = "",
-    val url: String = "",
-    val users: MutableList<User>? = null
+    var url: String = "",
+    var users: MutableList<User>? = null,
+    var heightPx: Int = 0
 )
