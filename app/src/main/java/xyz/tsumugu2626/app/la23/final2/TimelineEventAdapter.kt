@@ -16,6 +16,8 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
     private val TYPE_ONE = 1
     private val TYPE_TWO = 2
 
+    private lateinit var listener: OnItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_ONE -> {
@@ -37,6 +39,10 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
         val item = itemList[position]
         when (holder) {
             is TypeOneViewHolder -> {
+                holder.itemView.setOnClickListener {
+                    listener.onItemClickListener(it, position, item)
+                }
+
                 holder.timeWithTextStartTextView.text =  item.startHm
                 holder.timeWithTextEndTextView.text = item.endHm
                 holder.memberTextView.text = item.users?.size.toString()
@@ -82,6 +88,14 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
         val timeStartTextView: TextView = itemView.findViewById(R.id.timeline_item_text_start)
         val timeEndTextView: TextView = itemView.findViewById(R.id.timeline_item_text_end)
         val timeSpacer: Space = itemView.findViewById(R.id.timeline_item_spacer)
+    }
+
+    interface OnItemClickListener{
+        fun onItemClickListener(view: View, position: Int, item: TimelineEvent)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
     }
 }
 
