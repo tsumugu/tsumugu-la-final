@@ -40,8 +40,6 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
                 holder.timeWithTextStartTextView.text =  item.startHm
                 holder.timeWithTextEndTextView.text = item.endHm
                 holder.memberTextView.text = item.users?.size.toString()
-                //holder.descriptionTextView.text = item.url
-                holder.descriptionTextView.text = item.startedAt.toString()
                 holder.timeboxTextView.text =  item.startHm + "-" + item.endHm
 
                 val params = holder.timeWithTextSpacer.layoutParams
@@ -76,7 +74,6 @@ class TimelineEventAdapter(private val itemList: List<TimelineEvent>) : Recycler
         val timeWithTextStartTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_start)
         val timeWithTextEndTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_end)
         val memberTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_member)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_description)
         val timeboxTextView: TextView = itemView.findViewById(R.id.timeline_item_with_text_text_time_box)
         val timeWithTextSpacer: Space = itemView.findViewById(R.id.timeline_item_with_text_spacer)
     }

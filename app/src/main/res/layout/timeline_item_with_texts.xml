@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:background="@color/design_default_color_primary"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingTop="4dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="4dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,9 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
+                android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/white" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Space
                 android:id="@+id/timeline_item_with_text_spacer"
@@ -40,13 +42,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="01:00"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/timeline_item_with_text_spacer"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textColor="@color/white" />
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
-            android:layout_width="12dp"
+            android:layout_width="24dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -86,20 +88,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/timeline_item_with_text_text_description"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="\@Discord"
-                android:textColor="@color/white" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="126.280851064dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/full_logo_white" />
 
             <TextView
                 android:id="@+id/timeline_item_with_text_text_time_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
                 android:lines="1"
                 android:text="00:00-01:00"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
