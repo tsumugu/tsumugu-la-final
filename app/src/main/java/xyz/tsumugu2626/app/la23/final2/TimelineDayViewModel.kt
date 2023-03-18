@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.akribase.timelineview.Event
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -61,10 +60,10 @@ class TimelineDayViewModel(private val savedStateHandle: SavedStateHandle) : Vie
 
         val currentDateStr = currentTimeMillis.millisToYmdStr()
 
-        val filteredTimelineEvent = timelineEvent.filter { it.dayHm == currentDateStr }.sortedBy { it.createdAt }
+        // firebaseから取得したデータのうち、pagerで選択されている日付のもののみにフィルターして、開始日時で昇順にソート
+        val filteredTimelineEvent = timelineEvent.filter { it.dayHm == currentDateStr }.sortedBy { it.startedAt }
 
         val tmpTimelineEventList = ArrayList<TimelineEvent>()
-
         //0時0分から23時59分までの時間帯において、既に存在しているイベントを考慮しながら、1時間ごとにTimelineEventを生成し、tmpTimelineEventListに追加する
         val startOfDate = currentTimeMillis.millisToStartOfDate()
         val startTime = startOfDate.offsetDate(0, -1)

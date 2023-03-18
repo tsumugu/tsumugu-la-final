@@ -13,9 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.tsumugu2626.app.la23.final2.databinding.TimelineDayFragmentBinding
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class TimelineDayFragment : Fragment() {

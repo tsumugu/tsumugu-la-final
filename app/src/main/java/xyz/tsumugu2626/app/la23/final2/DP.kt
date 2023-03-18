@@ -10,12 +10,12 @@ import kotlin.math.roundToInt
 object DP {
     @RequiresApi(Build.VERSION_CODES.O)
     fun calcDpFromTimestamp(startedAt: Date, endedAt: Date): Int {
-        val BORDER = 70
+        val MIN_HEIGHT_DP = 70
 
         val dp = (((endedAt.toLocaleEpochSeconds()-startedAt.toLocaleEpochSeconds()) / 60 ) * 2).toInt()
 
-        if (dp <= BORDER) {
-            return BORDER
+        if (dp <= MIN_HEIGHT_DP) {
+            return MIN_HEIGHT_DP
         }
         return dp
     }
