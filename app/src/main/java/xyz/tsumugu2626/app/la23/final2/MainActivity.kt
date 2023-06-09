@@ -1,6 +1,10 @@
 package xyz.tsumugu2626.app.la23.final2
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -46,6 +50,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.prevButton.setOnClickListener {
             binding.pager.currentItem = binding.pager.currentItem - 1
+        }
+
+        binding.addEventButton.setOnClickListener {
+            val url = mainActivityViewModel.fabUrl.value
+            if (url != null) {
+                Log.d("OpenUrl", url.toString())
+                val uri = Uri.parse(url.toString())
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i);
+            } else {
+                Toast.makeText(applicationContext, "エラーが発生しました。もう一度時間を空けて試してみてください", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

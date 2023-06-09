@@ -1,5 +1,7 @@
 package xyz.tsumugu2626.app.la23.final2
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -54,8 +56,14 @@ class TimelineDayFragment : Fragment() {
         if (timelineEvent == null) return
         if (currentTimeMillis == null) return
 
-        binding.recyclerView.adapter = TimelineEventAdapter(
-            timelineDayViewModel.genTimeLineEvents(timelineEvent, currentTimeMillis, view.context)
-        )
+        val timelineEventAdapter = TimelineEventAdapter(timelineDayViewModel.genTimeLineEvents(timelineEvent, currentTimeMillis, view.context))
+        timelineEventAdapter.setOnItemClickListener(object: TimelineEventAdapter.OnItemClickListener{
+            override fun onItemClickListener(view: View, position: Int, item: TimelineEvent) {
+                val uri = Uri.parse(item.url)
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i);
+            }
+        })
+        binding.recyclerView.adapter = timelineEventAdapter
     }
 }

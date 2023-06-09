@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingLeft="16dp"
+        android:paddingTop="4dp"
         android:paddingRight="16dp"
+        android:paddingBottom="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
